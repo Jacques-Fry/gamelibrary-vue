@@ -13,7 +13,9 @@
       :titles="titles"
       :columns="columns"
       :dataList="dataList"
-      @showMessageBox="showMessageBox"
+      @showData="showDeatils"
+      @updData="showUpdDailog"
+      :option="{ show: true, upd: true, del: false }"
     />
 
     <div class="paging">
@@ -28,7 +30,8 @@
       ></el-pagination>
     </div>
 
-    <MessageBox title="用户详情" ref="detailsDialog">
+    <!-- 用户详情 -->
+    <MessageBox title="用户详情" ref="showDialog">
       <table class="deatils-table" slot="show-data">
         <tr>
           <th>用户名</th>
@@ -55,12 +58,24 @@
         <el-button size="small" type="warning">修 改</el-button>
       </span>
     </MessageBox>
+
+    <!-- 修改用户信息 -->
+    <MessageBox title="修改用户信息" ref="updDialog">
+      <el-form :model="userInfo" slot="show-data">
+        <el-form-item label="用户名称">
+          <el-input v-model="userInfo.usrname"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="show-footer">
+        <el-button size="small" type="warning">确认修改</el-button>
+      </span>
+    </MessageBox>
   </main>
 </template>
 <script>
 import UserTitle from "./UserTitle.vue";
 
-import Table from "components/common/bootstrap/table/Table.vue";
+import Table from "components/common/table/Table.vue";
 import MessageBox from "components/content/message/MessageBox.vue";
 
 import { queryUserList, selectUserById, exportData } from "network/user.js";
@@ -141,6 +156,10 @@ export default {
               begin: `<span class="el-tag el-tag--danger el-tag--plain">`,
               end: `</span>`,
             },
+            管理员: {
+              begin: `<span class="el-tag el-tag--warning el-tag--plain">`,
+              end: `</span>`,
+            },
           },
         },
         {
@@ -148,7 +167,7 @@ export default {
           styleEnable: true,
           style: {
             default: {
-              begin:  `<i class="iconfont jacques-time"></i> `,
+              begin: `<i class="iconfont jacques-time"></i> `,
               end: ``,
             },
           },
@@ -181,6 +200,9 @@ export default {
     // 查询用户列表
     this.queryDataList();
   },
+  mounted() {
+    this.showUpdDailog();
+  },
   methods: {
     // 查询所有角色列表
     selectAllRole() {
@@ -192,6 +214,7 @@ export default {
     },
     // 查询用户详情
     selectUserInfoById(id) {
+      this.userInfo = {};
       selectUserById(id).then((res) => {
         if (res && res.code == 200) {
           this.userInfo = res.data;
@@ -232,7 +255,7 @@ export default {
           this.pageStopLoading(loadingInstance);
           if (res && res.code === 200) {
             this.total = res.data.total;
-            let list = res.data.list;
+            let list = res.data.data;
             list.forEach((item) => {
               // 转换时间格式
               item.createTime = this.timeFormat(item.createTime);
@@ -264,11 +287,14 @@ export default {
       });
       return data ? data.nickname : "未知角色";
     },
-    // 弹出详情
-    showMessageBox(id) {
-      this.userInfo = {};
+    // 弹出数据详情
+    showDeatils(id) {
       this.selectUserInfoById(id);
-      this.$refs.detailsDialog.show = true;
+      this.$refs.showDialog.show = true;
+    },
+    showUpdDailog(id) {
+      this.selectUserInfoById(id);
+      this.$refs.updDialog.show = true;
     },
   },
   mixins: [CommonDataListContent],

@@ -7,6 +7,7 @@
       :titles="titles"
       :columns="columns"
       :dataList="dataList"
+      :option="{show:true,upd:false,del:true}"
     />
 
     <div class="paging">
@@ -25,7 +26,7 @@
 <script>
 import LogTitle from "./LogTitle.vue";
 
-import Table from "components/common/bootstrap/table/Table.vue";
+import Table from "components/common/table/Table.vue";
 
 import { queryLogList } from "network/log.js";
 
@@ -75,7 +76,7 @@ export default {
           this.pageStopLoading(loadingInstance);
           if (res && res.code === 200) {
             this.total = res.data.total;
-            let list = res.data.list;
+            let list = res.data.data;
             list.forEach((item) => {
               item.createTime = this.timeFormat(item.createTime);
               item.isCheck = false;

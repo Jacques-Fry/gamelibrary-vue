@@ -25,7 +25,7 @@
 <script>
 import RoleTitle from "./RoleTitle.vue";
 
-import Table from "components/common/bootstrap/table/Table.vue";
+import Table from "components/common/table/Table.vue";
 
 import { queryRoleList } from "network/role.js";
 
@@ -59,7 +59,7 @@ export default {
           this.pageStopLoading(loadingInstance);
           if (res && res.code === 200) {
             this.total = res.data.total;
-            let list = res.data.list;
+            let list = res.data.data;
             list.forEach((item) => {
               item.isCheck = false;
             });

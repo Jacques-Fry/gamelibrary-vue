@@ -7,7 +7,7 @@
       :titles="titles"
       :columns="columns"
       :dataList="dataList"
-      @showMessageBox="showMessageBox"
+      @showData="showDeatils"
     />
 
     <div class="paging">
@@ -22,7 +22,7 @@
       ></el-pagination>
     </div>
 
-    <MessageBox title="用户详情" ref="detailsDialog">
+    <MessageBox title="权限详情" ref="detailsDialog">
       <table class="deatils-table" slot="show-data">
         <tr>
           <th>权限名称</th>
@@ -47,7 +47,7 @@
 import PermissionTitle from "./PermissionTitle.vue";
 
 import MessageBox from "components/content/message/MessageBox.vue";
-import Table from "components/common/bootstrap/table/Table.vue";
+import Table from "components/common/table/Table.vue";
 
 import { queryPermissionList, selectDetails } from "network/permission.js";
 
@@ -57,7 +57,7 @@ export default {
   name: "PermissionContent",
   data() {
     return {
-      titles: [{ name: "权限名称" }, { name: "权限别称" }, { name: "路径" }],
+      titles: [{ name: "权限名称" }, { name: "权限别称" }, { name: "访问路径" }],
       columns: [
         { name: "name", styleEnable: false },
         { name: "nickname", styleEnable: false },
@@ -102,7 +102,7 @@ export default {
         this.pageStopLoading(loadingInstance);
         if (res && res.code === 200) {
           this.total = res.data.total;
-          let list = res.data.list;
+          let list = res.data.data;
           list.forEach((item) => {
             item.isCheck = false;
           });
@@ -116,7 +116,7 @@ export default {
       this.queryDataList();
     },
     // 弹出详情
-    showMessageBox(id) {
+    showDeatils(id) {
       this.permissionInfo = {};
       this.selectDetails(id);
       this.$refs.detailsDialog.show = true;

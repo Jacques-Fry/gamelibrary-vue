@@ -1,15 +1,15 @@
 import {
-  request
+    request
 } from "./request"
 
-export function queryLogList(log, pageNum, pageSize) {
-  return request({
-    method: 'POST',
-    url: '/syslog/queryList',
-    params: {
-      pageNum,
-      pageSize
-    },
-    data: log
-  })
+export function queryLogList(log, pageNo, pageSize) {
+    return request({
+        method: 'POST',
+        url: '/syslog/queryList',
+        params: {
+            pageNo,
+            pageSize
+        },
+        data: log
+    })
 }

@@ -8,7 +8,6 @@
       :max-height="maxHeight"
       @select-all="selectAll"
       @select="selectOne"
-      @cell-dblclick="cellDblClick"
     >
       <!-- 选择框 -->
       <el-table-column type="selection" width="55"> </el-table-column>
@@ -49,9 +48,35 @@
       </el-table-column>
 
       <!-- 元素操作栏 -->
-      <el-table-column fixed="right" label="操作" width="120">
-        <template>
-          <el-button type="text" size="small"> 移除 </el-button>
+      <el-table-column fixed="right" label="操作" width="200">
+        <template slot-scope="scope">
+          <el-button
+            v-if="option.show"
+            type="text"
+            size="base"
+            class="iconfont jacques-chakanxiangqing"
+            @click="show(scope.row.id)"
+          >
+            查看
+          </el-button>
+          <el-button
+            v-if="option.upd"
+            type="text"
+            size="base"
+            class="iconfont jacques-gai warning"
+            @click="upd(scope.row.id)"
+          >
+            修改
+          </el-button>
+          <el-button
+            v-if="option.del"
+            type="text"
+            size="base"
+            class="iconfont jacques-chushaixuanxiang danger"
+            @click="del(scope.row.id)"
+          >
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -80,6 +105,17 @@ export default {
       type: Array,
       default() {
         return [];
+      },
+    },
+    // 功能
+    option: {
+      type: Object,
+      default() {
+        return {
+          show: true,
+          upd: true,
+          del: true,
+        };
       },
     },
     // 最大高度
@@ -123,12 +159,27 @@ export default {
     selectOne(selection, row) {
       row.isCheck = selection.length > 0;
     },
-    // 双击事件
-    cellDblClick(row) {
-      this.$emit("showMessageBox", row.id);
+    // 查看数据详情
+    show(id) {
+      this.$emit("showData", id);
+    },
+    // 修改数据
+    upd(id) {
+      this.$emit("updData", id);
+    },
+    // 删除数据
+    del(id) {
+      this.$emit("delData", id);
     },
   },
 };
 </script>
 <style scoped>
+.warning {
+  color: #e6a23c;
+}
+
+.danger {
+  color: #f56c6c;
+}
 </style>
