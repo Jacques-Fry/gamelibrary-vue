@@ -13,7 +13,7 @@
       :titles="titles"
       :columns="columns"
       :dataList="dataList"
-      @showData="showDeatils"
+      @showData="showDialog"
       @updData="showUpdDailog"
       :option="{ show: true, upd: true, del: false }"
     />
@@ -34,8 +34,25 @@
     <MessageBox title="用户详情" ref="showDialog">
       <table class="deatils-table" slot="show-data">
         <tr>
+          <th>头像</th>
+          <td>
+            <el-avatar
+              :size="60"
+              v-if="userInfo.avatar"
+              :src="userInfo.avatar"
+            ></el-avatar>
+            <el-avatar :size="60" v-else class="user-head-portrait"
+              >无头像</el-avatar
+            >
+          </td>
+        </tr>
+        <tr>
           <th>用户名</th>
           <td>{{ userInfo.username }}</td>
+        </tr>
+        <tr>
+          <th>昵称</th>
+          <td>{{ userInfo.nickname }}</td>
         </tr>
         <tr>
           <th>联系电话</th>
@@ -54,20 +71,42 @@
           <td>{{ userInfo.createTime }}</td>
         </tr>
       </table>
-      <span slot="show-footer">
-        <el-button size="small" type="warning">修 改</el-button>
-      </span>
+      <span slot="show-footer"> </span>
     </MessageBox>
 
     <!-- 修改用户信息 -->
     <MessageBox title="修改用户信息" ref="updDialog">
-      <el-form :model="userInfo" slot="show-data">
-        <el-form-item label="用户名称">
-          <el-input v-model="userInfo.usrname"></el-input>
+      <el-form :model="userInfo" slot="show-data" label-width="80px">
+        <el-form-item>
+          <el-upload
+            action=""
+            class="avatar-uploader"
+            :show-file-list="false"
+            accept="image/jpeg,image/png,image/gif"
+            multiple
+            :http-request="uploadUserAcatar"
+          >
+            <img v-if="userInfo.avatar" :src="userInfo.avatar" class="avatar" />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="用户名">
+          <el-input v-model="userInfo.username" disabled></el-input>
+        </el-form-item>
+
+        <el-form-item label="昵称">
+          <el-input v-model="userInfo.nickname"></el-input>
+        </el-form-item>
+
+        <el-form-item label="联系电话">
+          <el-input v-model="userInfo.tel"></el-input>
         </el-form-item>
       </el-form>
+
       <span slot="show-footer">
-        <el-button size="small" type="warning">确认修改</el-button>
+        <el-button size="small" type="warning" @click="updateUserData"
+          >确认修改</el-button
+        >
       </span>
     </MessageBox>
   </main>
@@ -78,12 +117,19 @@ import UserTitle from "./UserTitle.vue";
 import Table from "components/common/table/Table.vue";
 import MessageBox from "components/content/message/MessageBox.vue";
 
-import { queryUserList, selectUserById, exportData } from "network/user.js";
+import {
+  queryUserList,
+  selectUserById,
+  exportUserData,
+  importUserData,
+  addUserData,
+  updUserData,
+  uploadAcatar,
+} from "network/user.js";
 import { getAllRole } from "network/role.js";
 
 import { CommonDataListContent } from "common/mixins.js";
 import { download } from "common/utils.js";
-import { uploadFile } from "network/common.js";
 export default {
   name: "UserContent",
   data() {
@@ -91,10 +137,17 @@ export default {
       // 表格头
       titles: [
         {
+          name: "",
+          width: 50,
+        },
+        {
+          name: "昵称",
+        },
+        {
           name: "用户名",
         },
         {
-          name: "手机号",
+          name: "联系电话",
         },
         {
           name: "账户状态",
@@ -107,21 +160,29 @@ export default {
       // 表格展示字段
       columns: [
         {
-          name: "username",
+          name: "avatar",
           styleEnable: true,
           style: {
             default: {
-              begin: ``,
-              end: ``,
+              begin: `<span class="el-avatar el-avatar--circle"><img src="`,
+              end: `" style="object-fit: cover;" /></span>`,
             },
           },
+        },
+        {
+          name: "nickname",
+          styleEnable: false,
+        },
+        {
+          name: "username",
+          styleEnable: false,
         },
         {
           name: "tel",
           styleEnable: true,
           style: {
             default: {
-              begin: `<i class="iconfont jacques-dianhua"></i> `,
+              begin: `<span class="iconfont jacques-dianhua"></span> `,
               end: ``,
             },
           },
@@ -132,15 +193,15 @@ export default {
           style: {
             default: {
               begin: `<span class="el-tag">`,
-              end: `</el-tag>`,
+              end: `</span>`,
             },
             已冻结: {
               begin: `<span class="el-tag el-tag--warning">`,
-              end: `</el-tag>`,
+              end: `</span>`,
             },
             正常: {
               begin: `<span class="el-tag el-tag--success">`,
-              end: `</el-tag>`,
+              end: `</span>`,
             },
           },
         },
@@ -176,6 +237,7 @@ export default {
       // 查询数据
       searchData: {
         username: "",
+        nickname: "",
         tel: "",
         roleId: null,
       },
@@ -185,6 +247,8 @@ export default {
       userInfo: {
         id: 0,
         username: "",
+        avatar: "",
+        nickname: "",
         tel: "",
         status: 0,
         roleId: 0,
@@ -201,9 +265,29 @@ export default {
     this.queryDataList();
   },
   mounted() {
-    this.showUpdDailog();
+    // this.showUpdDailog(1);
   },
   methods: {
+    // 上传用户头像
+    uploadUserAcatar(data) {
+      let formData = new FormData();
+      formData.append("file", data.file);
+      uploadAcatar(formData).then((res) => {
+        this.userInfo.avatar = res.data;
+      });
+    },
+    // 修改用户信息
+    updateUserData() {
+      updUserData(this.userInfo).then((res) => {
+        if (res && res.code == 200) {
+          this.$message({
+            showClose: true,
+            message: res.msg,
+            type: "success",
+          });
+        }
+      });
+    },
     // 查询所有角色列表
     selectAllRole() {
       getAllRole().then((res) => {
@@ -229,13 +313,13 @@ export default {
     },
     // 用户数据导出
     exportData() {
-      exportData().then((res) => {
+      exportUserData().then((res) => {
         download(res, "用户数据.xlsx");
       });
     },
     // 用户数据导入
     importUserData(data) {
-      uploadFile("/user/import", data).then((res) => {
+      importUserData(data).then((res) => {
         if (res.code == 200) {
           this.$message({
             showClose: true,
@@ -288,10 +372,11 @@ export default {
       return data ? data.nickname : "未知角色";
     },
     // 弹出数据详情
-    showDeatils(id) {
+    showDialog(id) {
       this.selectUserInfoById(id);
       this.$refs.showDialog.show = true;
     },
+    // 弹出修改窗口
     showUpdDailog(id) {
       this.selectUserInfoById(id);
       this.$refs.updDialog.show = true;
@@ -334,5 +419,31 @@ export default {
 .deatils-table tr td {
   text-align: left;
   padding-left: 10px;
+}
+
+.avatar-uploader {
+  width: 100px;
+  height: 100px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+}
+.avatar {
+  width: 100px;
+  height: 100px;
+  display: block;
 }
 </style>

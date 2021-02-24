@@ -9,6 +9,10 @@
         <el-input size="mini" v-model="permission.nickname" clearable placeholder="权限别称"></el-input>
       </div>
 
+       <div>
+        <el-input size="mini" v-model="permission.type" clearable placeholder="权限类型"></el-input>
+      </div>
+
       <div >
         <el-button
           :loading="loading"
@@ -21,7 +25,15 @@
     </div>
 
     <!-- 功能栏 -->
-    <div class="action-option"></div>
+    <div class="action-option">
+       <el-row :gutter="10" type="flex" class="row-bg">
+        <el-col :span="1.5">
+          <el-button size="mini" type="success" class="iconfont jacques--tainjia" @click="addPermission">
+            添加权限</el-button
+          >
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 <script>
@@ -40,12 +52,16 @@ export default {
       permission: {
         name: "",
         nickname: "",
+        type:""
       }
     };
   },
   methods: {
     queryData() {
       this.$emit("searchDataList",this.permission);
+    },
+    addPermission(){
+       this.$emit("addPermission");
     }
   }
 };

@@ -1,11 +1,17 @@
 <template>
   <div name="MessageBox">
     <div class="wage-detail">
-      <el-dialog :title="title" :visible.sync="show" width="30%" center>
+      <el-dialog
+        :title="title"
+        :visible.sync="show"
+        width="30%"
+        center
+        :close-on-click-modal="false"
+      >
         <slot name="show-data" />
         <div slot="footer" class="dialog-footer">
           <slot name="show-footer" />
-          <span style="margin-left: 10px;">
+          <span style="margin-left: 10px">
             <el-button size="small" @click="show = false">关闭</el-button>
           </span>
         </div>
@@ -26,6 +32,7 @@ export default {
   data() {
     return { show: false };
   },
+  methods: {},
 };
 </script>
 

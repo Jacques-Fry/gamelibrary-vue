@@ -1,3 +1,5 @@
+const root = "/user/syslog";
+
 import {
     request
 } from "./request"
@@ -5,7 +7,7 @@ import {
 export function queryLogList(log, pageNo, pageSize) {
     return request({
         method: 'POST',
-        url: '/syslog/queryList',
+        url: root + '/queryList',
         params: {
             pageNo,
             pageSize

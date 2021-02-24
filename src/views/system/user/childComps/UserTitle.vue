@@ -15,6 +15,15 @@
       <div>
         <el-input
           size="mini"
+          v-model="user.nickname"
+          clearable
+          placeholder="昵称"
+        ></el-input>
+      </div>
+
+      <div>
+        <el-input
+          size="mini"
           v-model="user.tel"
           clearable
           placeholder="手机号"
@@ -47,7 +56,7 @@
 
     <!-- 功能栏 -->
     <div class="action-option">
-      <el-row :gutter="10" type="flex" class="row-bg right">
+      <el-row :gutter="10" type="flex" class="row-bg">
         <el-col :span="1.5">
           <el-button size="mini" type="danger" class="iconfont jacques-dongjie">
             冻结</el-button
@@ -135,6 +144,7 @@ export default {
     return {
       user: {
         username: "",
+        nickname:"",
         tel: "",
         roleId: null,
       },

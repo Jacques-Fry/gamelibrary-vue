@@ -10,7 +10,7 @@
         label-width="0px"
         class="demo-ruleForm login-page"
       >
-        <h3 class="title">资料管理库系统</h3>
+        <h3 class="title">资料库管理系统</h3>
         <el-form-item prop="username">
           <el-input type="text" v-model="user.username" auto-complete="off" placeholder="用户名/手机号"></el-input>
         </el-form-item>

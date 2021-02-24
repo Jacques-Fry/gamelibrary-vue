@@ -21,7 +21,8 @@
     </div>
 
         <!-- 功能栏 -->
-    <div class="action-option"></div>
+    <div class="action-option">
+    </div>
   </div>
 </template>
 <script>

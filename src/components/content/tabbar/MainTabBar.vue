@@ -1,6 +1,6 @@
 <template>
   <TabBar>
-    <div class="tab-bar-left" slot="tab-bar-left">资料管理库</div>
+    <div class="tab-bar-left" slot="tab-bar-left">资料库</div>
     <div slot="tab-bar-center">
       <!-- 菜单 -->
       <el-menu
@@ -37,9 +37,13 @@
       >
         <el-submenu index="2">
           <template slot="title">
-            <el-avatar class="user-head-portrait">管理</el-avatar>
-            我的工作台</template
-          >
+            <el-avatar
+              v-if="user.avatar"
+              :src="user.avatar"
+            ></el-avatar>
+            <el-avatar v-else class="user-head-portrait">管理</el-avatar>
+            <span>{{ user.nickname }}</span>
+          </template>
           <el-menu-item index="/detail">个人中心</el-menu-item>
           <el-menu-item index="2-2">切换账号</el-menu-item>
           <el-menu-item index="2-3" @click.native="loginOut"

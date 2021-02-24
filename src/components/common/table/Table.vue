@@ -18,6 +18,7 @@
         :key="title.name + index"
         :label="title.name"
         lazy
+        :width="title.width"
       >
         <!-- 数据渲染 -->
         <template slot-scope="scope">

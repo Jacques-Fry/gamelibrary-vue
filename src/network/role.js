@@ -1,11 +1,14 @@
+// 根路径
+const root = "/user/role";
+
 import {
     request
 } from "./request"
-
+// 分页查询角色列表
 export function queryRoleList(role, pageNo, pageSize) {
     return request({
         method: 'POST',
-        url: '/role/queryList',
+        url: root + '/queryList',
         params: {
             pageNo,
             pageSize
@@ -13,10 +16,10 @@ export function queryRoleList(role, pageNo, pageSize) {
         data: role
     })
 }
-
+// 获取所有角色
 export function getAllRole() {
     return request({
         method: 'POST',
-        url: '/role/selectAll',
+        url: root + '/selectAll',
     })
 }

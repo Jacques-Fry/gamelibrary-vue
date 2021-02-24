@@ -8,14 +8,24 @@
         <MainNavBar />
       </div>
       <div class="layout-right" slot="layout-one-right">
+
         <div class="layout-right-breadcrumb">
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item v-for="(item,index) in BreadcrumbList" :to="{ path: item.url }" :key="'breadcrumb'+index" >{{item.name}}</el-breadcrumb-item>
+            <el-breadcrumb-item
+              v-for="(item, index) in BreadcrumbList"
+              :to="{ path: item.url }"
+              :key="'breadcrumb' + index"
+              >{{ item.name }}</el-breadcrumb-item
+            >
           </el-breadcrumb>
+          
         </div>
+
         <router-view class="layout-right-page" />
       </div>
-      <div class="layout-foot" slot="layout-one-foot">© 最终解释权归花落泪知雨所有</div>
+      <div class="layout-foot" slot="layout-one-foot">
+        © 最终解释权归花落泪知雨所有
+      </div>
     </Layout>
   </div>
 </template>
@@ -35,12 +45,12 @@ export default {
   components: {
     Layout,
     MainTabBar,
-    MainNavBar
+    MainNavBar,
   },
   computed: {
     ...mapGetters({
-      BreadcrumbList: "getBreadcrumbList"
-    })
+      BreadcrumbList: "getBreadcrumbList",
+    }),
   },
 };
 </script>
