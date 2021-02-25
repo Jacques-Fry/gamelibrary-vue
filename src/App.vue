@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <MainLayout v-if="isLogin" />
-    <router-view v-else/>
+    <router-view v-if="isLogin" />
+    <MainLayout v-else />
   </div>
 </template>
 
@@ -14,17 +14,20 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "app",
-  computed:{
-    ...mapGetters(["isLogin"])
+  computed: {
+    ...mapGetters(["isLogin"]),
+    isOtherPage() {
+      const otherPage = ["/login"];
+      return otherPage.find((item) => item == this.$route.path);
+    },
   },
   mounted() {
     this.$bus.$on("toLogin", () => {
       this.$router.push("/login");
     });
-    
   },
   components: {
-    MainLayout
+    MainLayout,
   },
   created() {
     let token = localStorage.getItem("token");
@@ -34,20 +37,21 @@ export default {
     } else {
       this.$store.commit("setToken", token);
       //获取用户数据
-      details().then(res=>{
+      details().then((res) => {
         this.$store.commit("setUser", res.data);
         this.$notify({
           showClose: true,
-          title: "欢迎回来 "+res.data.username,
-          type: "success"
+          title: "欢迎回来 " + res.data.username,
+          type: "success",
         });
-      })
+      });
     }
-  }
+  },
 };
 </script>
 
 <style>
+@import "assets/css/animation.css";
 @import "assets/css/base.css";
 @import "assets/css/normalize.css";
 @import "assets/icon/iconfont.css";

@@ -9,7 +9,7 @@
       </div>
       <div class="layout-right" slot="layout-one-right">
 
-        <div class="layout-right-breadcrumb">
+        <div class="layout-right-breadcrumb" v-if="BreadcrumbList.length">
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item
               v-for="(item, index) in BreadcrumbList"

@@ -1,0 +1,44 @@
+/* 可以设置不同的进入和离开动画 */
+
+
+/* 设置持续时间和动画函数 */
+
+
+/* 划出划入动画 */
+
+.slide-fade-enter-active {
+    transition: all 0.5s ease;
+}
+
+.slide-fade-leave-active {
+    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter,
+.slide-fade-leave-to
+/* .slide-fade-leave-active 用于 2.1.8 以下版本 */
+
+{
+    transform: translateY(50px);
+    opacity: 0;
+}
+
+
+/* 缩小放大动画 */
+
+.scale-fade-enter-active {
+    transition: all 0.5s ease;
+}
+
+.scale-fade-leave-active {
+    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.scale-fade-enter,
+.slide-fade-leave-to
+/* .slide-fade-leave-active 用于 2.1.8 以下版本 */
+
+{
+    transform: scale(0.5, 0.5);
+    opacity: 0;
+}

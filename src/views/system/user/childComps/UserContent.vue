@@ -59,12 +59,28 @@
           <td>{{ userInfo.tel }}</td>
         </tr>
         <tr>
+          <th>邮箱</th>
+          <td>{{ userInfo.email }}</td>
+        </tr>
+        <tr>
+          <th>生日</th>
+          <td>{{ userInfo.birthday | formatBirthday }}</td>
+        </tr>
+        <tr>
           <th>账户状态</th>
-          <td>{{ userInfo.status }}</td>
+          <td>
+            <el-tag :type="switchUserStatusTag(userInfo.status)">
+              {{ userInfo.statusName }}
+            </el-tag>
+          </td>
         </tr>
         <tr>
           <th>角色权限</th>
-          <td>{{ userInfo.roleId }}</td>
+          <td>
+            <el-tag :type="switchUserRoleTag(userInfo.roleName)">
+              {{ userInfo.roleName }}
+            </el-tag>
+          </td>
         </tr>
         <tr>
           <th>注册时间</th>
@@ -76,7 +92,12 @@
 
     <!-- 修改用户信息 -->
     <MessageBox title="修改用户信息" ref="updDialog">
-      <el-form :model="userInfo" slot="show-data" label-width="80px">
+      <el-form
+        ref="updForm"
+        :model="userInfo"
+        slot="show-data"
+        label-width="80px"
+      >
         <el-form-item>
           <el-upload
             action=""
@@ -90,16 +111,41 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="用户名">
+        <el-form-item
+          label="用户名"
+          :rules="[{ required: true, message: '用户名不能为空' }]"
+          prop="username"
+        >
           <el-input v-model="userInfo.username" disabled></el-input>
         </el-form-item>
 
-        <el-form-item label="昵称">
+        <el-form-item
+          label="昵称"
+          :rules="[{ required: true, message: '昵称不能为空' }]"
+          prop="nickname"
+        >
           <el-input v-model="userInfo.nickname"></el-input>
         </el-form-item>
 
-        <el-form-item label="联系电话">
+        <el-form-item
+          label="联系电话"
+          :rules="[{ required: true, message: '联系电话不能为空' }]"
+          prop="tel"
+        >
           <el-input v-model="userInfo.tel"></el-input>
+        </el-form-item>
+
+        <el-form-item label="邮箱">
+          <el-input v-model="userInfo.email"></el-input>
+        </el-form-item>
+
+        <el-form-item label="生日">
+          <el-date-picker
+            v-model="userInfo.birthday"
+            type="date"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
         </el-form-item>
       </el-form>
 
@@ -112,6 +158,8 @@
   </main>
 </template>
 <script>
+import { formatDate } from "common/utils.js";
+
 import UserTitle from "./UserTitle.vue";
 
 import Table from "components/common/table/Table.vue";
@@ -250,6 +298,8 @@ export default {
         avatar: "",
         nickname: "",
         tel: "",
+        email: "",
+        birthday: 0,
         status: 0,
         roleId: 0,
         createTime: 0,
@@ -278,14 +328,19 @@ export default {
     },
     // 修改用户信息
     updateUserData() {
-      updUserData(this.userInfo).then((res) => {
-        if (res && res.code == 200) {
-          this.$message({
-            showClose: true,
-            message: res.msg,
-            type: "success",
-          });
+      this.$refs.updForm.validate((valid) => {
+        if (!valid) {
+          return false;
         }
+        updUserData(this.userInfo).then((res) => {
+          if (res && res.code == 200) {
+            this.$message({
+              showClose: true,
+              message: res.msg,
+              type: "success",
+            });
+          }
+        });
       });
     },
     // 查询所有角色列表
@@ -305,9 +360,11 @@ export default {
           // 注册时间
           this.userInfo.createTime = this.timeFormat(this.userInfo.createTime);
           // 角色权限
-          this.userInfo.roleId = this.switchUserRole(this.userInfo.roleId);
+          this.userInfo.roleName = this.switchUserRole(this.userInfo.roleId);
           // 账户状态
-          this.userInfo.status = this.switchUserStatus(this.userInfo.status);
+          this.userInfo.statusName = this.switchUserStatus(
+            this.userInfo.status
+          );
         }
       });
     },
@@ -360,17 +417,7 @@ export default {
       this.searchData = data;
       this.queryDataList();
     },
-    // 转换用户状态数据
-    switchUserStatus(status) {
-      return status == 0 ? "正常" : status == 1 ? "已冻结" : "未知状态";
-    },
-    // 转换用户角色数据
-    switchUserRole(roleId) {
-      const data = this.roleList.find((item) => {
-        return item.id == roleId;
-      });
-      return data ? data.nickname : "未知角色";
-    },
+
     // 弹出数据详情
     showDialog(id) {
       this.selectUserInfoById(id);
@@ -380,6 +427,39 @@ export default {
     showUpdDailog(id) {
       this.selectUserInfoById(id);
       this.$refs.updDialog.show = true;
+    },
+    // 转换用户状态数据
+    switchUserStatus(value) {
+      return value == 0 ? "正常" : value == 1 ? "已冻结" : "未知状态";
+    },
+    // 转换用户角色数据
+    switchUserRole(value) {
+      const data = this.roleList.find((item) => {
+        return item.id == value;
+      });
+      return data ? data.nickname : "未知角色";
+    },
+    // 转换用户状态标签
+    switchUserStatusTag(value) {
+      return value == 0 ? "success" : "danger";
+    },
+    // 转换用户角色标签
+    switchUserRoleTag(value) {
+      return value == "超级管理员"
+        ? "danger"
+        : value == "管理员"
+        ? "warning"
+        : "info";
+    },
+  },
+  filters: {
+    //日期格式化
+    formatBirthday(value) {
+      if (value) {
+        return formatDate(new Date(value), "yyyy年MM月dd日");
+      } else {
+        return value;
+      }
     },
   },
   mixins: [CommonDataListContent],

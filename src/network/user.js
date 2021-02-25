@@ -81,6 +81,8 @@ export function updUserData(user) {
             nickname: user.nickname,
             tel: user.tel,
             avatar: user.avatar,
+            email: user.email,
+            birthday: user.birthday,
         }
     })
 }
