@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <router-view v-if="isLogin" />
-    <MainLayout v-else />
+    <MainLayout  v-if="isLogin" />
+    <router-view  v-else />
   </div>
 </template>
 
@@ -41,7 +41,7 @@ export default {
         this.$store.commit("setUser", res.data);
         this.$notify({
           showClose: true,
-          title: "欢迎回来 " + res.data.username,
+          title: "欢迎回来 " + res.data.nickname,
           type: "success",
         });
       });

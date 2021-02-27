@@ -255,7 +255,7 @@ export default {
               type: "success",
             });
 
-            this.$refs.addDialog.show = false;
+            this.$refs.addDialog.close();
             this.permissionAddData = {};
             this.queryDataList();
           }
@@ -315,16 +315,16 @@ export default {
     // 弹出详情
     showDialog(id) {
       this.selectDetails(id);
-      this.$refs.showDialog.show = true;
+      this.$refs.showDialog.open();
     },
     // 弹出修改窗口
     showUpdDailog(id) {
       this.selectDetails(id);
-      this.$refs.updDialog.show = true;
+      this.$refs.updDialog.open();
     },
     // 弹出添加窗口
     showAddDialog() {
-      this.$refs.addDialog.show = true;
+      this.$refs.addDialog.open();
     },
     // 重置表单数据
     resetForm(formName) {
