@@ -13,13 +13,17 @@
         :default-active="defaultActive"
       >
         <el-submenu index="userManager">
-          <template slot="title">用户管理</template>
+          <template slot="title">
+            <i class="iconfont jacques-user"></i> 用户管理</template
+          >
           <el-menu-item index="/user">用户</el-menu-item>
           <el-menu-item index="/role">角色</el-menu-item>
           <el-menu-item index="/permission">权限</el-menu-item>
         </el-submenu>
         <el-submenu index="logManager">
-          <template slot="title">日志记录</template>
+          <template slot="title">
+            <i class="iconfont jacques-rizhijilu"></i>日志记录</template
+          >
           <el-menu-item index="/log">操作记录</el-menu-item>
         </el-submenu>
       </el-menu>

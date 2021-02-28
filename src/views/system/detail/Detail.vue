@@ -1,71 +1,72 @@
 <template>
   <div class="UserDetail">
-    <div class="user-center">
-      <div class="user-menu">
-        <transition name="scale-fade" mode="in-out">
-          <div class="user-menu-top" v-show="detailsMenuShow">
-            <div>
-              <!-- 头像 -->
-              <el-avatar
-                :size="60"
-                v-if="user.avatar"
-                :src="user.avatar"
-                class="atatar"
-              ></el-avatar>
-              <el-avatar :size="60" v-else class="user-head-portrait"
-                >暂无头像</el-avatar
-              >
-            </div>
-            <!-- 昵称 -->
-            <div class="user-menu-top-username">
-              {{ user.nickname }}
-            </div>
-            <!-- 角色 -->
-            <div class="user-menu-top-roleName">
-              <el-tag :type="switchUserRoleTag(roleName)">
-                {{ roleName }}
-              </el-tag>
-            </div>
-          </div>
-        </transition>
-
-        <transition name="scale-fade" mode="in-out">
-          <!-- 菜单内容 -->
-          <div class="user-menu-content" v-show="detailsMenuShow">
-            <el-row>
-              <el-col>
-                <el-menu
-                mode="vertical"
-                  row="userSettingMenu"
-                  router
-                  :default-active="defaultActive"
-                  active-background-color="#d4d4d4"
-                  text-color="#000"
-                  active-text-color="#409eff"
+    <vue-scroll>
+      <div class="user-center">
+        <div class="user-menu">
+          <transition name="scale-fade" mode="in-out">
+            <div class="user-menu-top" v-show="detailsMenuShow">
+              <div>
+                <!-- 头像 -->
+                <el-avatar
+                  :size="60"
+                  v-if="user.avatar"
+                  :src="user.avatar"
+                  class="atatar"
+                ></el-avatar>
+                <el-avatar :size="60" v-else class="user-head-portrait"
+                  >暂无头像</el-avatar
                 >
-                  <el-menu-item index="/detail/userdetailsetting">
-                    <span>个人设置</span>
-                  </el-menu-item>
-                  <el-menu-item index="/detail/usersercuritysetting">
-                    <span>安全设置</span>
-                  </el-menu-item>
-                </el-menu>
-              </el-col>
-            </el-row>
-          </div>
-        </transition>
-      </div>
+              </div>
+              <!-- 昵称 -->
+              <div class="user-menu-top-username">
+                {{ user.nickname }}
+              </div>
+              <!-- 角色 -->
+              <div class="user-menu-top-roleName">
+                <el-tag :type="switchUserRoleTag(roleName)">
+                  {{ roleName }}
+                </el-tag>
+              </div>
+            </div>
+          </transition>
 
-      <!-- 内容 -->
-      <transition name="slide-fade" mode="in-out">
-        <div class="user-setting" v-show="detailsMenuContentShow">
-          <div class="user-setting-title">个人设置</div>
-          <el-divider></el-divider>
-          <router-view />
-          <el-divider></el-divider>
+          <transition name="scale-fade" mode="in-out">
+            <!-- 菜单内容 -->
+            <div class="user-menu-content" v-show="detailsMenuShow">
+              <el-row>
+                <el-col>
+                  <el-menu
+                    mode="vertical"
+                    row="userSettingMenu"
+                    router
+                    :default-active="defaultActive"
+                    active-background-color="#d4d4d4"
+                    text-color="#505050"
+                    active-text-color="#409eff"
+                  >
+                    <el-menu-item index="/detail/userdetailsetting">
+                      <span class="iconfont jacques-gerenshezhi">
+                        个人设置</span
+                      >
+                    </el-menu-item>
+                    <el-menu-item index="/detail/usersercuritysetting">
+                      <span class="iconfont jacques-anquanshezhi1">
+                        安全设置</span
+                      >
+                    </el-menu-item>
+                  </el-menu>
+                </el-col>
+              </el-row>
+            </div>
+          </transition>
         </div>
-      </transition>
-    </div>
+
+        <!-- 内容 -->
+        <div class="user-setting">
+          <router-view />
+        </div>
+      </div>
+    </vue-scroll>
   </div>
 </template>
 <script>
@@ -83,7 +84,6 @@ export default {
   data() {
     return {
       detailsMenuShow: false,
-      detailsMenuContentShow: false,
       // 角色列表
       roleList: [],
       userInfo: {},
@@ -160,7 +160,6 @@ export default {
 }
 
 .user-center {
-  margin-top: 50px;
   width: 860px;
   display: flex;
   position: relative;
@@ -196,20 +195,8 @@ export default {
 
 .user-menu-content {
   margin-top: 10px;
-
-  background-color: #fff;
-}
-
-.user-setting {
-  width: 500px;
-  margin-left: 20px;
-  padding: 20px;
-
-  background-color: #fff;
-}
-
-.user-setting-title {
-  font-size: 20px;
   font-weight: bold;
+
+  background-color: #fff;
 }
 </style>

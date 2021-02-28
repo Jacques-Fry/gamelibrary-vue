@@ -1,51 +1,60 @@
 <template>
-  <div>
-    <el-form
-      ref="updForm"
-      :model="userInfo"
-      slot="show-data"
-      label-width="80px"
-    >
-      <el-form-item
-        label="账号"
-        :rules="[{ required: true, message: '用户名不能为空' }]"
-        prop="username"
-      >
-        <el-input v-model="userInfo.username" disabled></el-input>
-      </el-form-item>
-
-      <el-form-item
-        label="昵称"
-        :rules="[{ required: true, message: '昵称不能为空' }]"
-        prop="nickname"
-      >
-        <el-input v-model="userInfo.nickname"></el-input>
-      </el-form-item>
-
-      <el-form-item
-        label="电话"
-        :rules="[{ required: true, message: '联系电话不能为空' }]"
-        prop="tel"
-      >
-        <el-input v-model="userInfo.tel"></el-input>
-      </el-form-item>
-
-      <el-form-item label="邮箱">
-        <el-input v-model="userInfo.email"></el-input>
-      </el-form-item>
-
-      <el-form-item label="生日">
-        <el-date-picker
-          v-model="userInfo.birthday"
-          type="date"
-          placeholder="选择日期"
+  <div name="UserDetailSetting">
+    <transition name="slide-fade" mode="in-out">
+      <div class="content" v-show="contentShow">
+        <div class="content-title iconfont jacques-gerenshezhi">个人设置</div>
+        <el-divider></el-divider>
+        <el-form
+          ref="updForm"
+          :model="userInfo"
+          slot="show-data"
+          label-width="80px"
         >
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="warning" @click="updateDetails">保存修改</el-button>
-      </el-form-item>
-    </el-form>
+          <el-form-item
+            label="账号"
+            :rules="[{ required: true, message: '用户名不能为空' }]"
+            prop="username"
+          >
+            <el-input v-model="userInfo.username" disabled></el-input>
+          </el-form-item>
+
+          <el-form-item
+            label="昵称"
+            :rules="[{ required: true, message: '昵称不能为空' }]"
+            prop="nickname"
+          >
+            <el-input v-model="userInfo.nickname"></el-input>
+          </el-form-item>
+
+          <el-form-item
+            label="电话"
+            :rules="[{ required: true, message: '联系电话不能为空' }]"
+            prop="tel"
+          >
+            <el-input v-model="userInfo.tel"></el-input>
+          </el-form-item>
+
+          <el-form-item label="邮箱">
+            <el-input v-model="userInfo.email"></el-input>
+          </el-form-item>
+
+          <el-form-item label="生日">
+            <el-date-picker
+              v-model="userInfo.birthday"
+              type="date"
+              placeholder="选择日期"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="warning" @click="updateDetails"
+              >保存修改</el-button
+            >
+          </el-form-item>
+        </el-form>
+        <el-divider></el-divider>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -60,19 +69,28 @@ export default {
   data() {
     return {
       userInfo: {},
+      contentShow: false,
     };
+  },
+  mounted() {
+    this.contentShow = true;
   },
   methods: {
     // 修改用户信息
     updateDetails() {
-      updDetails(this.userInfo).then((res) => {
-        if (res && res.code == 200) {
-          this.$message({
-            showClose: true,
-            message: res.msg,
-            type: "success",
-          });
+      this.$refs.updForm.validate((valid) => {
+        if (!valid) {
+          return false;
         }
+        updDetails(this.userInfo).then((res) => {
+          if (res && res.code == 200) {
+            this.$message({
+              showClose: true,
+              message: "设置成功",
+              type: "success",
+            });
+          }
+        });
       });
     },
     // 上传用户头像
@@ -95,5 +113,18 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.content {
+  width: 500px;
+  margin-left: 20px;
+  padding: 20px;
+
+  background-color: #fff;
+}
+
+.content-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #505050;
+}
 </style>

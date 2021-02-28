@@ -1,31 +1,40 @@
 <template>
   <div>
-    <el-form
-      ref="updForm"
-      :model="passwordData"
-      slot="show-data"
-      label-width="80px"
-    >
-      <el-form-item
-        label="密码"
-        :rules="[{ required: true, message: '用户名不能为空' }]"
-        prop="password"
-      >
-        <el-input v-model="passwordData.password"></el-input>
-      </el-form-item>
+    <transition name="slide-fade" mode="in-out">
+      <div class="content" v-show="contentShow">
+        <div class="content-title iconfont jacques-anquanshezhi1">
+          安全设置
+        </div>
+        <el-divider></el-divider>
+        <el-form
+          ref="updForm"
+          :model="passwordData"
+          slot="show-data"
+          label-width="80px"
+        >
+          <el-form-item
+            label="密码"
+            :rules="[{ required: true, message: '用户名不能为空' }]"
+            prop="password"
+          >
+            <el-input v-model="passwordData.password"></el-input>
+          </el-form-item>
 
-      <el-form-item
-        label="确认密码"
-        :rules="[{ required: true, message: '昵称不能为空' }]"
-        prop="password2"
-      >
-        <el-input v-model="passwordData.password2"></el-input>
-      </el-form-item>
+          <el-form-item
+            label="确认密码"
+            :rules="[{ required: true, message: '昵称不能为空' }]"
+            prop="password2"
+          >
+            <el-input v-model="passwordData.password2"></el-input>
+          </el-form-item>
 
-      <el-form-item>
-        <el-button type="warning">保存修改</el-button>
-      </el-form-item>
-    </el-form>
+          <el-form-item>
+            <el-button type="warning">保存修改</el-button>
+          </el-form-item>
+        </el-form>
+        <el-divider></el-divider>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -38,10 +47,28 @@ export default {
         password: "",
         password2: "",
       },
+      contentShow: false,
     };
+  },
+  mounted() {
+    this.contentShow = true;
   },
 };
 </script>
 
-<style>
+<style scoped>
+.content {
+  width: 500px;
+  margin-left: 20px;
+  padding: 20px;
+
+  background-color: #fff;
+}
+
+.content-title {
+  font-size: 20px;
+  font-weight: bold;
+
+  color: #505050;
+}
 </style>
