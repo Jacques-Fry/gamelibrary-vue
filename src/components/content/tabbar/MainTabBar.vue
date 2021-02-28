@@ -37,10 +37,7 @@
       >
         <el-submenu index="2">
           <template slot="title">
-            <el-avatar
-              v-if="user.avatar"
-              :src="user.avatar"
-            ></el-avatar>
+            <el-avatar v-if="user.avatar" :src="user.avatar"></el-avatar>
             <el-avatar v-else class="user-head-portrait">管理</el-avatar>
             <span>{{ user.nickname }}</span>
           </template>

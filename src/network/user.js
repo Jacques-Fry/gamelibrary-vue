@@ -41,6 +41,17 @@ export function details() {
     })
 }
 
+//获取登录用户数据
+export function updDetails(user) {
+    return request({
+        url: root + '/updDetails',
+        method: "POST",
+        data: user
+
+    })
+}
+
+
 //获取用户数据
 export function selectUserById(id) {
     return request({

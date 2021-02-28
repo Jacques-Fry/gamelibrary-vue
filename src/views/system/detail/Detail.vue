@@ -1,9 +1,9 @@
 <template>
   <div class="UserDetail">
     <div class="user-center">
-      <transition name="scale-fade" mode="in-out">
-        <div class="user-menu" v-show="detailsMenuShow">
-          <div class="user-menu-top">
+      <div class="user-menu">
+        <transition name="scale-fade" mode="in-out">
+          <div class="user-menu-top" v-show="detailsMenuShow">
             <div>
               <!-- 头像 -->
               <el-avatar
@@ -27,54 +27,42 @@
               </el-tag>
             </div>
           </div>
-          <div class="user-menu-content"></div>
-        </div>
-      </transition>
+        </transition>
+
+        <transition name="scale-fade" mode="in-out">
+          <!-- 菜单内容 -->
+          <div class="user-menu-content" v-show="detailsMenuShow">
+            <el-row>
+              <el-col>
+                <el-menu
+                mode="vertical"
+                  row="userSettingMenu"
+                  router
+                  :default-active="defaultActive"
+                  active-background-color="#d4d4d4"
+                  text-color="#000"
+                  active-text-color="#409eff"
+                >
+                  <el-menu-item index="/detail/userdetailsetting">
+                    <span>个人设置</span>
+                  </el-menu-item>
+                  <el-menu-item index="/detail/usersercuritysetting">
+                    <span>安全设置</span>
+                  </el-menu-item>
+                </el-menu>
+              </el-col>
+            </el-row>
+          </div>
+        </transition>
+      </div>
+
+      <!-- 内容 -->
       <transition name="slide-fade" mode="in-out">
-        <div class="user-setting" v-show="detailsMenuShow">
-          <p>
-            <span>
-              <i class="iconfont jacques-nicheng"></i>
-              <span class="title"> 昵称: </span>
-            </span>
-            <span>{{ user.nickname }}</span>
-          </p>
-          <p>
-            <span class="title">
-              <i class="iconfont jacques-dianhua"></i>
-              <span class="title"> 手机: </span>
-            </span>
-            <span>{{ user.tel }}</span>
-          </p>
-          <p>
-            <span class="title">
-              <i class="iconfont jacques-youxiang"></i>
-              <span class="title"> 邮箱: </span>
-            </span>
-            <span>{{ user.email }}</span>
-          </p>
-          <p>
-            <span class="title"
-              ><i class="iconfont jacques-shengri"></i> 生日:
-            </span>
-            <span>{{ user.birthday | timeFormat }}</span>
-          </p>
-          <p>
-            <span class="title"
-              ><i class="iconfont jacques-zhuangtai"></i> 账户状态:
-            </span>
-            <span>
-              <el-tag :type="switchUserStatusTag(user.status)">
-                {{ user.status | switchUserStatus }}
-              </el-tag>
-            </span>
-          </p>
-          <p>
-            <span class="title"
-              ><i class="iconfont jacques-shijian"></i> 注册时间:
-            </span>
-            <span>{{ user.createTime | timeFormat }}</span>
-          </p>
+        <div class="user-setting" v-show="detailsMenuContentShow">
+          <div class="user-setting-title">个人设置</div>
+          <el-divider></el-divider>
+          <router-view />
+          <el-divider></el-divider>
         </div>
       </transition>
     </div>
@@ -84,24 +72,31 @@
 import { mapGetters } from "vuex";
 
 import { getAllRole } from "network/role.js";
-import { details, uploadAcatar } from "network/user.js";
 
 import { formatDate } from "common/utils.js";
 
+import UserDetailSetting from "./childComps/UserDetailSetting";
+
 export default {
   name: "UserDetail",
-  components: {},
+  components: { UserDetailSetting },
   data() {
     return {
       detailsMenuShow: false,
+      detailsMenuContentShow: false,
       // 角色列表
       roleList: [],
+      userInfo: {},
     };
   },
   computed: {
     ...mapGetters({
       user: "getUser",
     }),
+    // 当前激活菜单
+    defaultActive() {
+      return this.$route.path;
+    },
     roleName() {
       const data = this.roleList.find((item) => {
         return item.id == this.user.roleId;
@@ -113,10 +108,10 @@ export default {
     this.$store.commit("setBreadcrumbList", []);
 
     this.selectAllRole();
-    this.selectDetails();
   },
   mounted() {
     this.detailsMenuShow = true;
+    this.detailsMenuContentShow = true;
   },
   methods: {
     // 查询所有角色列表
@@ -125,22 +120,6 @@ export default {
         if (res && res.code == 200) {
           this.roleList = res.data;
         }
-      });
-    },
-    // 查询用户详情
-    selectDetails() {
-      details().then((res) => {
-        if (res.code == 200) {
-          this.$store.commit("setUser", res.data);
-        }
-      });
-    },
-    // 上传用户头像
-    uploadUserAcatar(data) {
-      let formData = new FormData();
-      formData.append("file", data.file);
-      uploadAcatar(formData).then((res) => {
-        this.user.avatar = res.data;
       });
     },
     // 转换用户状态标签
@@ -182,9 +161,11 @@ export default {
 
 .user-center {
   margin-top: 50px;
-
+  width: 860px;
   display: flex;
-  justify-content: center;
+  position: relative;
+  margin-left: 50%;
+  right: 430px;
 }
 
 .user-menu {
@@ -214,7 +195,6 @@ export default {
 }
 
 .user-menu-content {
-  height: 210px;
   margin-top: 10px;
 
   background-color: #fff;
@@ -226,5 +206,10 @@ export default {
   padding: 20px;
 
   background-color: #fff;
+}
+
+.user-setting-title {
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>
