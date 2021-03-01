@@ -10,6 +10,32 @@
           slot="show-data"
           label-width="80px"
         >
+          <el-form-item class="atatar">
+            <div>
+              <!-- 头像 -->
+              <el-avatar
+                :size="80"
+                v-if="userInfo.avatar"
+                :src="userInfo.avatar"
+              ></el-avatar>
+              <el-avatar :size="80" v-else class="user-head-portrait"
+                >暂无头像</el-avatar
+              >
+            </div>
+            <div>
+              <el-upload
+                action=""
+                class="avatar-uploader"
+                :show-file-list="false"
+                accept="image/jpeg,image/png,image/gif"
+                multiple
+                :http-request="uploadUserAcatar"
+              >
+              <el-button size="small">更换头像</el-button>
+              </el-upload>
+            </div>
+          </el-form-item>
+
           <el-form-item
             label="账号"
             :rules="[{ required: true, message: '用户名不能为空' }]"
@@ -47,7 +73,10 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-button type="warning" @click="updateDetails"
+            <el-button
+              type="warning"
+              @click="updateDetails"
+              :loading="loadingUplaod"
               >保存修改</el-button
             >
           </el-form-item>
@@ -59,7 +88,7 @@
 </template>
 
 <script>
-import { details, uploadAcatar, updDetails } from "network/user.js";
+import { details, uploadAcatar, updDetails, updAvatar } from "network/user.js";
 
 export default {
   name: "UserDetailSetting",
@@ -70,6 +99,9 @@ export default {
     return {
       userInfo: {},
       contentShow: false,
+
+      // 加载按钮
+      loadingUplaod: false,
     };
   },
   mounted() {
@@ -82,6 +114,7 @@ export default {
         if (!valid) {
           return false;
         }
+        this.loadingUplaod = true;
         updDetails(this.userInfo).then((res) => {
           if (res && res.code == 200) {
             this.$message({
@@ -90,6 +123,7 @@ export default {
               type: "success",
             });
           }
+          this.loadingUplaod = false;
         });
       });
     },
@@ -126,5 +160,11 @@ export default {
   font-size: 20px;
   font-weight: bold;
   color: #505050;
+}
+
+.atatar {
+  line-height: 60px;
+
+  vertical-align: middle;
 }
 </style>

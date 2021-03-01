@@ -98,6 +98,28 @@ export function updUserData(user) {
     })
 }
 
+// 修改密码
+export function updPassword(password) {
+    return request({
+        url: root + '/updPassword',
+        method: "PUT",
+        params: {
+            password
+        }
+    })
+}
+
+// 修改头像
+export function updAvatar(avatar) {
+    return request({
+        url: root + '/updAvatar',
+        method: "PUT",
+        params: {
+            avatar
+        }
+    })
+}
+
 // 上传头像
 export function uploadAcatar(file) {
     return uploadFile("http://Jacques-Fry:29109/file/upload", file)

@@ -13,7 +13,7 @@
                   :src="user.avatar"
                   class="atatar"
                 ></el-avatar>
-                <el-avatar :size="60" v-else class="user-head-portrait"
+                <el-avatar :size="60" v-else
                   >暂无头像</el-avatar
                 >
               </div>
