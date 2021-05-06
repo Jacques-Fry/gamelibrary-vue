@@ -13,9 +13,7 @@
                   :src="user.avatar"
                   class="atatar"
                 ></el-avatar>
-                <el-avatar :size="60" v-else
-                  >暂无头像</el-avatar
-                >
+                <el-avatar :size="60" v-else>暂无头像</el-avatar>
               </div>
               <!-- 昵称 -->
               <div class="user-menu-top-username">
@@ -78,6 +76,7 @@ import { formatDate } from "common/utils.js";
 
 import UserDetailSetting from "./childComps/UserDetailSetting";
 
+
 export default {
   name: "UserDetail",
   components: { UserDetailSetting },
@@ -87,6 +86,7 @@ export default {
       // 角色列表
       roleList: [],
       userInfo: {},
+      items: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     };
   },
   computed: {
@@ -198,5 +198,9 @@ export default {
   font-weight: bold;
 
   background-color: #fff;
+}
+
+.flip-list-move {
+  transition: transform 1s;
 }
 </style>
