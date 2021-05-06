@@ -5,7 +5,7 @@
         <div class="content-title iconfont jacques-anquanshezhi1">安全设置</div>
         <el-divider></el-divider>
 
-        <el-divider content-position="left">修改密码</el-divider>
+        <el-divider content-position="left">更换密码</el-divider>
 
         <el-form
           ref="updForm"
@@ -14,7 +14,7 @@
           label-width="80px"
           :rules="rules"
         >
-          <el-form-item label="新密码" prop="password">
+          <el-form-item label="新的密码" prop="password">
             <el-input v-model="passwordData.password" show-password />
           </el-form-item>
 

@@ -5,7 +5,7 @@
     </div>
     <div class="layout-one-content" :style="contentStyle">
       <div class="layout-one-left" :style="leftStyle">
-        <slot name="layout-one-left">页面左边</slot>
+        <slot name="layout-one-left"  >页面左边</slot>
       </div>
       <div class="layout-one-right" :style="rightStyle">
         <slot name="layout-one-right">页面右边</slot>

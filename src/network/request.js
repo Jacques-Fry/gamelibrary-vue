@@ -16,7 +16,7 @@ export function request(config) {
     instance.interceptors.request.use(config => {
         // console.log(store.getters.getToken)
         // console.log(typeof (store.getters.getToken) == "string")
-        if (typeof(store.getters.getToken) == "string" && store.getters.getToken) config.headers['Authorization'] = store.getters.getToken
+        if (typeof (store.getters.getToken) == "string" && store.getters.getToken) config.headers['Authorization'] = store.getters.getToken
         return config
     }, err => {
         console.log(err)
@@ -44,7 +44,7 @@ export function request(config) {
                 message: res.data.msg,
                 type: "error"
             });
-        } else if (res.data.code && res.data.code != 200) {
+        } else if (res.data.code && res.data.code != 200 && res.data.code != 2000) {
             vue.$message({
                 showClose: true,
                 message: res.data.msg,

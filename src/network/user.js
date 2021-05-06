@@ -122,5 +122,5 @@ export function updAvatar(avatar) {
 
 // 上传头像
 export function uploadAcatar(file) {
-    return uploadFile("http://Jacques-Fry:29109/file/upload", file)
+    return uploadFile("/file/file/upload", file)
 }

@@ -1,6 +1,6 @@
 <template>
   <div class>
-    <Layout :left-width="80">
+    <Layout :left-width="0">
       <div class="layout-title" slot="layout-one-title">
         <MainTabBar />
       </div>

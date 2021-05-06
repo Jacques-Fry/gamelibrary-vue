@@ -1,6 +1,7 @@
 <template>
   <TabBar>
     <div class="tab-bar-left" slot="tab-bar-left">资料库</div>
+
     <div slot="tab-bar-center">
       <!-- 菜单 -->
       <el-menu
@@ -12,22 +13,30 @@
         router
         :default-active="defaultActive"
       >
+        <!-- 主页 -->
+        <el-menu-item index="/home">
+          <i class="iconfont jacques-geren1 menu-icon"/> 我的主页
+        </el-menu-item>
+        <!-- 用户 -->
         <el-submenu index="userManager">
           <template slot="title">
-            <i class="iconfont jacques-user"></i> 用户管理</template
+            <i class="iconfont jacques-user menu-icon"/> 用户管理</template
           >
           <el-menu-item index="/user">用户</el-menu-item>
           <el-menu-item index="/role">角色</el-menu-item>
           <el-menu-item index="/permission">权限</el-menu-item>
         </el-submenu>
+
+        <!-- 日志 -->
         <el-submenu index="logManager">
           <template slot="title">
-            <i class="iconfont jacques-rizhijilu"></i>日志记录</template
+            <i class="iconfont jacques-rizhijilu menu-icon"/> 日志记录</template
           >
           <el-menu-item index="/log">操作记录</el-menu-item>
         </el-submenu>
       </el-menu>
     </div>
+
     <!-- 用户菜单 -->
     <div class="tab-bar-right" slot="tab-bar-right">
       <el-menu
@@ -43,6 +52,7 @@
           <template slot="title">
             <el-avatar v-if="user.avatar" :src="user.avatar"></el-avatar>
             <el-avatar v-else class="user-head-portrait">管理</el-avatar>
+            &nbsp;
             <span>{{ user.nickname }}</span>
           </template>
           <el-menu-item index="/detail">个人中心</el-menu-item>
@@ -57,7 +67,7 @@
 </template>
 
 <script type="text/javascript">
-import TabBar from "components/common/tabbar/TabBar";
+import TabBar from "@/components/common/tabbar/TabBar";
 
 import { mapGetters } from "vuex";
 
@@ -115,5 +125,9 @@ export default {
 }
 .el-icon-arrow-down {
   font-size: 12px;
+}
+.menu-icon{
+  position: relative;
+  bottom: 2    px;
 }
 </style>
