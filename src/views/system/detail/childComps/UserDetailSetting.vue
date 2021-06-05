@@ -31,7 +31,7 @@
                 multiple
                 :http-request="uploadUserAcatar"
               >
-              <el-button size="small">更换头像</el-button>
+                <el-button size="small">更换头像</el-button>
               </el-upload>
             </div>
           </el-form-item>
@@ -124,6 +124,8 @@ export default {
             });
           }
           this.loadingUplaod = false;
+          // 更新用户信息
+          selectDetails()
         });
       });
     },
@@ -132,7 +134,14 @@ export default {
       let formData = new FormData();
       formData.append("file", data.file);
       uploadAcatar(formData).then((res) => {
-        this.userInfo.avatar = res.data;
+        if (res && res.code == 2000) {
+          this.$message({
+            showClose: true,
+            message: "上传成功",
+            type: "success",
+          });
+          this.userInfo.avatar = res.data;
+        }
       });
     },
     // 查询用户详情
