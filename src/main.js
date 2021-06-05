@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-
 //消息总线
 Vue.prototype.$bus = new Vue()
 
@@ -14,37 +13,37 @@ Vue.use(ElementUI)
 //vue侧边栏
 import vuescroll from 'vuescroll';
 Vue.use(vuescroll, {
-  // 在这里设置全局默认配置
-  ops: {
-    vuescroll: {
-      //选择一个模式, native 或者 slide
-      mode: "native",
-      //如果父容器不是固定高度，请设置为 number , 否则保持默认的percent即可
-      sizeStrategy: "number",
-      //是否检测内容尺寸发生变化
-      detectResize: true
+    // 在这里设置全局默认配置
+    ops: {
+        vuescroll: {
+            //选择一个模式, native 或者 slide
+            mode: "native",
+            //如果父容器不是固定高度，请设置为 number , 否则保持默认的percent即可
+            sizeStrategy: "number",
+            //是否检测内容尺寸发生变化
+            detectResize: true
+        },
+        scrollPanel: {
+            scrollingX: false
+        },
+        rail: {
+            //轨道的背景色
+            background: "#666666",
+            //轨道的尺寸
+            size: "5px",
+            //轨道的透明度
+            opacity: 0.2
+        },
+        bar: {
+            //在鼠标离开容器后多长时间隐藏滚动条
+            showDelay: 2000,
+            //滚动条背景色
+            background: "#666666",
+            //滚动条透明度
+            opacity: 0.5
+        }
     },
-    scrollPanel: {
-      scrollingX: false
-    },
-    rail: {
-      //轨道的背景色
-      background: "#666666",
-      //轨道的尺寸
-      size: "5px",
-      //轨道的透明度
-      opacity: 0.2
-    },
-    bar: {
-      //在鼠标离开容器后多长时间隐藏滚动条
-      showDelay: 2000,
-      //滚动条背景色
-      background: "#666666",
-      //滚动条透明度
-      opacity: 0.5
-    }
-  },
-  name: 'vue-scroll' // 在这里自定义组件名字，默认是vueScroll
+    name: 'vue-scroll' // 在这里自定义组件名字，默认是vueScroll
 });
 
 // 音乐播放器
@@ -66,9 +65,13 @@ import "bootstrap/dist/js/bootstrap.min.js";
 
 Vue.config.productionTip = false
 
+// socketIO
+import socketIO from './common/socketIO.js'
+Vue.prototype.$socketIO = socketIO
+
 new Vue({
-  router,
-  store,
-  $,
-  render: h => h(App)
+    router,
+    store,
+    $,
+    render: h => h(App)
 }).$mount('#app')

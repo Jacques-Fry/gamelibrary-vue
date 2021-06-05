@@ -71,7 +71,15 @@ module.exports = {
                 pathRewrite: { // 去掉 路径中的  /api  的这一截
                     '^/api': ''
                 }
-            }
+            },
+            '/socket.io': {
+                target: 'http://jacques-fry:19091',
+                ws: true, // 如果要代理 websockets，配置这个参数
+                pathRewrite: {
+                    // 配置参考:https://www.cnblogs.com/hanguidong/p/9460495.html
+                    // '^/socket.io': '',
+                },
+            },
         },
 
     }

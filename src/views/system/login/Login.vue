@@ -12,13 +12,30 @@
       >
         <h3 class="title">资料库管理系统</h3>
         <el-form-item prop="username">
-          <el-input type="text" v-model="user.username" auto-complete="off" placeholder="用户名/手机号"></el-input>
+          <el-input
+            type="text"
+            v-model="user.username"
+            auto-complete="off"
+            placeholder="用户名/手机号"
+          ></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input type="password" v-model="user.password"  @keyup.enter.native="handleSubmit" auto-complete="off" placeholder="密码"></el-input>
+          <el-input
+            type="password"
+            v-model="user.password"
+            @keyup.enter.native="handleSubmit"
+            auto-complete="off"
+            placeholder="密码"
+          ></el-input>
         </el-form-item>
-        <el-form-item style="width:100%;">
-          <el-button type="primary" style="width:100%;" @click.native="handleSubmit" :loading="logining">登录</el-button>
+        <el-form-item style="width: 100%">
+          <el-button
+            type="primary"
+            style="width: 100%"
+            @click.native="handleSubmit"
+            :loading="logining"
+            >登录</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -26,7 +43,7 @@
 </template>
 
 <script>
-import { login,details } from "network/user.js";
+import { login, details } from "network/user.js";
 
 import { mapGetters } from "vuex";
 
@@ -36,49 +53,53 @@ export default {
       logining: false,
       user: {
         username: "admin",
-        password: "123456"
+        password: "123456",
       },
       rules: {
         username: [
-          { required: true, message: "账号不能为空", trigger: "blur" }
+          { required: true, message: "账号不能为空", trigger: "blur" },
         ],
-        password: [{ required: true, message: "密码不能为空", trigger: "blur" }]
-      }
+        password: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
+        ],
+      },
     };
   },
   computed: {
-    ...mapGetters(["isLogin"])
+    ...mapGetters(["isLogin"]),
   },
   mounted() {
-    if (this.isLogin) this.$router.push("/")
+    if (this.isLogin) this.$router.push("/");
   },
   methods: {
     handleSubmit(event) {
-      this.$refs.user.validate(valid => {
+      this.$refs.user.validate((valid) => {
         if (valid) {
           this.logining = true;
-          login(this.user.username, this.user.password).then(res => {
+          login(this.user.username, this.user.password).then((res) => {
             this.logining = false;
             if (res.code == 200) {
+
+              // 存入本地
               localStorage.setItem("token", res.data);
               this.$store.commit("setToken", res.data);
               //获取用户数据
-              details().then(res=>{
+              details().then((res) => {
                 this.$store.commit("setUser", res.data);
-                  this.$notify({
-                    showClose: true,
-                    title: "欢迎来到资料馆",
-                    type: "success"
-                  });
-              })
+                this.$notify({
+                  showClose: true,
+                  title: "欢迎来到资料馆",
+                  type: "success",
+                });
+              });
             }
           });
         } else {
           return false;
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -87,7 +108,7 @@ export default {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: url(~assets/img/background.jpg) no-repeat ;
+  background: url(~assets/img/background.jpg) no-repeat;
   background-size: cover;
 }
 .login-page {
@@ -110,7 +131,7 @@ label.el-checkbox.rememberme {
   margin: 0px 0px 15px;
   text-align: left;
 }
-.title{
+.title {
   text-align: center;
   margin-bottom: 30px;
   font-weight: 600;
